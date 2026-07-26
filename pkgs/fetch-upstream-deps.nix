@@ -46,10 +46,20 @@
 
   archiveFetchArgs = dep: let
     name = dep.x-cmake.name;
+    # Keep a recognizable archive suffix so unpackPhase can detect the format.
+    # Prefer dest-filename from deps.json; otherwise derive from the URL.
+    urlBase = baseNameOf dep.url;
+    fileName =
+      dep."dest-filename"
+      or (
+        if builtins.match ".*\\.(tar\\.gz|tar\\.bz2|tar\\.xz|tgz|zip|tar)" urlBase != null
+        then urlBase
+        else "${name}-src.tar.gz"
+      );
   in
     {
       url = dep.url;
-      name = dep."dest-filename" or "${name}-src";
+      name = fileName;
     }
     // (
       if dep ? sha256

@@ -1,22 +1,32 @@
 # Toolchain matching upstream environment.yml / BUILD.md:
 #   clang=22, clang-tools=22, lld=22
-#   sysroot_linux-64=2.28 (manylinux_2_28) → older libstdc++ than nixpkgs' default gcc 15
+#   sysroot_linux-64=2.28 (manylinux_2_28) → older libstdc++ headers than
+#   nixpkgs' default gcc 15
 #
-# Keep LLVM 22 for the compiler/modules support upstream requires, but point
-# clang at gcc14's libstdc++ so C++20 module builds match the conda-forge
-# baseline while remaining ABI-compatible with nixpkgs C++ libraries
-# (need CXXABI_1.3.15 for e.g. libsrt from ffmpeg).
+# Compile against gcc13's libstdc++ headers so C++20 modules + the deps.json
+# rstd pin behave like the conda manylinux baseline. Link/run against the
+# default gcc's libstdc++ so we remain ABI-compatible with nixpkgs C++ libs
+# (e.g. libsrt needs CXXABI_1.3.15).
 {
+  lib,
   llvmPackages_22,
-  gcc14,
+  gcc13,
+  gcc,
   overrideCC,
 }: let
   clang = llvmPackages_22.clang.override {
-    gccForLibs = gcc14.cc;
+    gccForLibs = gcc13.cc;
   };
   stdenv = overrideCC llvmPackages_22.stdenv clang;
+  libstdcxx = lib.getLib gcc.cc;
+  # NIX_LDFLAGS is passed to ld directly (no -Wl, prefix).
+  libstdcxxLinkFlags = [
+    "-L${libstdcxx}/lib"
+    "-rpath"
+    "${libstdcxx}/lib"
+  ];
 in
   llvmPackages_22
   // {
-    inherit stdenv clang;
+    inherit stdenv clang libstdcxx libstdcxxLinkFlags;
   }

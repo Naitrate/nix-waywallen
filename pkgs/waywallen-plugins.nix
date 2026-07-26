@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages_latest,
+  llvmPackages, # upstream clang 22 + manylinux-compatible libstdc++ (see upstream-clang.nix)
   cmake,
   pkg-config,
   ffmpeg,
@@ -15,10 +15,11 @@
   src,
   rstd-src,
   wavsen-src,
+  nlohmann_json-src,
 }:
-llvmPackages_latest.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation rec {
   pname = "waywallen-plugins";
-  version = "0.1.8";
+  version = "0.2.5";
 
   inherit src;
 
@@ -41,8 +42,8 @@ llvmPackages_latest.stdenv.mkDerivation rec {
     pkg-config
     ninja
     glslang # glslangValidator for wavsen shader compilation
-    llvmPackages_latest.clang-tools
-    llvmPackages_latest.lld
+    llvmPackages.clang-tools
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -53,8 +54,11 @@ llvmPackages_latest.stdenv.mkDerivation rec {
     vulkan-headers
     libva # wavsen dependency
     libpulseaudio # wavsen dependency
+    llvmPackages.libstdcxx # newer libstdc++ for linking nixpkgs C++ deps
   ];
 
+  # Prefer default-gcc libstdc++ at link time (compile still uses gcc13 headers).
+  NIX_LDFLAGS = llvmPackages.libstdcxxLinkFlags;
   cmakeFlags = [
     # Only build the plugins component
     "-DWAYWALLEN_BUILD_DAEMON=OFF"
@@ -65,8 +69,9 @@ llvmPackages_latest.stdenv.mkDerivation rec {
     # Point FetchDeps at the pre-fetched Nix store paths
     "-DFETCHDEPS_LOCAL_rstd=${rstd-src}"
     "-DFETCHDEPS_LOCAL_wavsen=${wavsen-src}"
+    "-DFETCHDEPS_LOCAL_nlohmann_json=${nlohmann_json-src}"
     # C++20 module scanning
-    "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages_latest.clang-tools}/bin/clang-scan-deps"
+    "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages.clang-tools}/bin/clang-scan-deps"
   ];
 
   meta = with lib; {

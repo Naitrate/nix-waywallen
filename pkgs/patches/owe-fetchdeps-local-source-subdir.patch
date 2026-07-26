@@ -1,13 +1,13 @@
 --- a/cmake/FetchDeps.cmake	2026-07-25 16:54:17.247623860 -0700
-+++ b/cmake/FetchDeps.cmake	2026-07-25 16:55:11.417326269 -0700
-@@ -169,7 +169,27 @@
++++ b/cmake/FetchDeps.cmake	2026-07-25 16:55:25.594267578 -0700
+@@ -169,7 +169,28 @@
      elseif(DEFINED FETCHDEPS_LOCAL_${_fd_name}
             AND EXISTS "${FETCHDEPS_LOCAL_${_fd_name}}")
        message(STATUS "fetchdeps: ${_fd_name} <- local override ${FETCHDEPS_LOCAL_${_fd_name}}")
 -      add_subdirectory("${FETCHDEPS_LOCAL_${_fd_name}}" "${_fd_name}")
-+      # Mirror the Flatpak provider: honor source_subdir, skip missing
-+      # CMakeLists (cmake-noop), SetPopulated, then GetProperties so
-+      # ${_fd_name}_SOURCE_DIR is visible to the caller.
++      # Mirror the Flatpak dependency provider: honor source_subdir, skip
++      # missing CMakeLists (e.g. cmake-noop), and export SOURCE_DIR so
++      # callers like third_party/CEF.cmake see ${_fd_name}_SOURCE_DIR.
 +      set(_fd_src "${FETCHDEPS_LOCAL_${_fd_name}}")
 +      set(_fd_bin "${CMAKE_BINARY_DIR}/_deps/${_fd_name}-build")
 +      set(_fd_add_src "${_fd_src}")
@@ -25,7 +25,8 @@
 +      FetchContent_SetPopulated(${_fd_name}
 +        SOURCE_DIR "${_fd_src}"
 +        BINARY_DIR "${_fd_bin}")
-+      FetchContent_GetProperties(${_fd_name})
++      set(${_fd_name}_SOURCE_DIR "${_fd_src}")
++      set(${_fd_name}_BINARY_DIR "${_fd_bin}")
        set(_fd_did_load TRUE)
      elseif(EXISTS "${_fd_source_root}/${_fd_name}")
        message(STATUS "fetchdeps: ${_fd_name} <- local ${_fd_source_root}/${_fd_name}")

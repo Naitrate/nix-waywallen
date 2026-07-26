@@ -2,11 +2,11 @@
   "nodes": {
     "nixpkgs": {
       "locked": {
-        "lastModified": 1780749050,
-        "narHash": "sha256-3av0pIjlOWQ6rDbNOmpUSvbNnJkGORQKKjb4LtCZsIY=",
+        "lastModified": 1784796856,
+        "narHash": "sha256-wWFrV5/Qbm+lyt5x20E/bSbfJiGKMo4RCxZV8cl/WZI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a799d3e3886da994fa307f817a6bc705ae538eeb",
+        "rev": "e2587caef70cea85dd97d7daab492899902dbf5d",
         "type": "github"
       },
       "original": {
@@ -19,15 +19,16 @@
     "open-wallpaper-engine-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1780838765,
-        "narHash": "sha256-6x1rcLx4kt+Suz50fMqjf5jkNazogAibM30juBEEz5s=",
+        "lastModified": 1783864811,
+        "narHash": "sha256-nfYef1gLgblMZVNlDIs8gdumJi8hZxebPnm9BSrW45M=",
         "owner": "waywallen",
         "repo": "open-wallpaper-engine",
-        "rev": "740daacb9f8a3921b169722a76f17201d210aeea",
+        "rev": "0d7f92f4c6945ed3f759c0e84f25b0831eaee31c",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
+        "ref": "v0.1.12",
         "repo": "open-wallpaper-engine",
         "type": "github"
       }
@@ -43,15 +44,16 @@
     "waywallen-display-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1780729681,
-        "narHash": "sha256-7Zem/95tJxa/n+0PtxXvDGwiAroeS2/GEMrF/70u8OI=",
+        "lastModified": 1783175765,
+        "narHash": "sha256-ofNvXDpLP9eH+MdefqAYa1FbBMNopO493X+3rQLkjIs=",
         "owner": "waywallen",
         "repo": "waywallen-display",
-        "rev": "69bcdc0b968b5a8bcaa313131c0bc6aea15ade02",
+        "rev": "fc653114cea2b9f11b1b5114ff1df732bc7d91c3",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
+        "ref": "v0.2.8",
         "repo": "waywallen-display",
         "type": "github"
       }
@@ -59,15 +61,16 @@
     "waywallen-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1780842953,
-        "narHash": "sha256-W6AwxUL8Gz/ye5ezORFksg4i29bmuU//F9EI/zW49OE=",
+        "lastModified": 1783873601,
+        "narHash": "sha256-xojP0C+q+1CcXAtxHALjaoMaJtjzuGk0A2RW8mAxwaE=",
         "owner": "waywallen",
         "repo": "waywallen",
-        "rev": "04b57c07e18566e4de1e12deaeb00324fe37a282",
+        "rev": "67950ba0e70b8ba675dc2b98cbf29e163ef8338a",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
+        "ref": "v0.2.5",
         "repo": "waywallen",
         "type": "github"
       }

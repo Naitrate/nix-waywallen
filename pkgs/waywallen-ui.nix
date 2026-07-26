@@ -1,5 +1,5 @@
 { lib
-, llvmPackages_latest
+, llvmPackages # upstream clang 22 + manylinux-compatible libstdc++ (see upstream-clang.nix)
 , cmake
 , pkg-config
 , qt6
@@ -21,9 +21,9 @@
 , asio-src
 , pegtl-src
 }:
-llvmPackages_latest.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation rec {
   pname = "waywallen-ui";
-  version = "0.1.8";
+  version = "0.2.5";
 
   inherit src;
 
@@ -48,8 +48,8 @@ llvmPackages_latest.stdenv.mkDerivation rec {
     protobuf
     glslang
     ninja
-    llvmPackages_latest.clang-tools
-    llvmPackages_latest.lld
+    llvmPackages.clang-tools
+    llvmPackages.lld
   ];
 
   buildInputs = [
@@ -64,7 +64,10 @@ llvmPackages_latest.stdenv.mkDerivation rec {
     libpulseaudio
     qt6.qtwayland
     vulkan-loader
+    llvmPackages.libstdcxx
   ];
+
+  NIX_LDFLAGS = llvmPackages.libstdcxxLinkFlags;
 
   cmakeFlags = [
     "-DFETCHDEPS_LOCAL_rstd=${rstd-src}"
@@ -75,7 +78,7 @@ llvmPackages_latest.stdenv.mkDerivation rec {
     "-DFETCHDEPS_LOCAL_asio=${asio-src}"
     "-DFETCHDEPS_LOCAL_pegtl=${pegtl-src}"
     "-DCMAKE_MODULE_PATH=${qt6.qtgrpc}/lib/cmake/Qt6"
-    "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages_latest.clang-tools}/bin/clang-scan-deps"
+    "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages.clang-tools}/bin/clang-scan-deps"
   ];
 
   qtWrapperArgs = [

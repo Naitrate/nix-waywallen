@@ -24,35 +24,17 @@
   waywallen-display-src = fetchInput "waywallen-display-src";
   open-wallpaper-engine-src = fetchInput "open-wallpaper-engine-src";
 
-  # Parse deps.json from waywallen-src
-  depsJson = builtins.fromJSON (builtins.readFile "${waywallen-src}/deps.json");
+  # Clang 22 + older libstdc++ (conda sysroot_linux-64=2.28 baseline).
+  llvmPackages = pkgs.callPackage ./pkgs/upstream-clang.nix {};
 
-  # Helper to resolve sub-dependencies dynamically from deps.json
-  fetchDep = name: let
-    match = builtins.filter (d: d.x-cmake.name or "" == name) depsJson;
-  in
-    if builtins.length match > 0
-    then let
-      dep = builtins.head match;
-    in
-      if name == "qml_material"
-      then
-        pkgs.fetchgit {
-          url = dep.url;
-          rev = dep.commit;
-          hash = "sha256-iygNy9PvQpK0/PoHCNOjMYNNn19YMSWFSaVakFK3XQI=";
-          fetchLFS = true;
-        }
-      else
-        builtins.fetchGit {
-          url = dep.url;
-          rev = dep.commit;
-          allRefs = true;
-        }
-    else throw "Dependency ${name} not found in deps.json";
+  fetchDep = pkgs.callPackage ./pkgs/fetch-upstream-deps.nix {
+    depsJson = builtins.fromJSON (builtins.readFile "${waywallen-src}/deps.json");
+    lfsHashes.qml_material = "sha256-bAr2BiW7Rj3QBFIOCHyIKBuXxZiHjFz7U7pOAbPzhrA=";
+  };
 
   waywallen-daemon = pkgs.callPackage ./pkgs/waywallen-daemon.nix {src = waywallen-src;};
   waywallen-ui = pkgs.callPackage ./pkgs/waywallen-ui.nix {
+    inherit llvmPackages;
     src = waywallen-src;
     rstd-src = fetchDep "rstd";
     ncrequest-src = fetchDep "ncrequest";
@@ -63,9 +45,11 @@
     pegtl-src = fetchDep "pegtl";
   };
   waywallen-plugins = pkgs.callPackage ./pkgs/waywallen-plugins.nix {
+    inherit llvmPackages;
     src = waywallen-src;
     rstd-src = fetchDep "rstd";
     wavsen-src = fetchDep "wavsen";
+    nlohmann_json-src = fetchDep "nlohmann_json";
   };
   waywallen-layer-shell = pkgs.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
   waywallen-kde = pkgs.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};
@@ -74,7 +58,7 @@ in rec {
   inherit waywallen-daemon waywallen-ui waywallen-plugins waywallen-layer-shell waywallen-kde waywallen-gnome;
 
   waywallen-open-wallpaper-engine = pkgs.callPackage ./pkgs/waywallen-open-wallpaper-engine.nix {
-    inherit waywallen-plugins;
+    inherit llvmPackages waywallen-plugins;
     src = open-wallpaper-engine-src;
   };
 

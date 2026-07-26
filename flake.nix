@@ -4,18 +4,18 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    # Upstream sources — tracked at latest default-branch commit.
-    # Pin is recorded in flake.lock; run `nix flake update` to advance.
+    # Upstream sources — pinned to latest release tags.
+    # Bump the tag refs when packaging a new upstream release.
     waywallen-src = {
-      url = "github:waywallen/waywallen";
+      url = "github:waywallen/waywallen/v0.2.5";
       flake = false;
     };
     waywallen-display-src = {
-      url = "github:waywallen/waywallen-display";
+      url = "github:waywallen/waywallen-display/v0.2.8";
       flake = false;
     };
     open-wallpaper-engine-src = {
-      url = "github:waywallen/open-wallpaper-engine";
+      url = "github:waywallen/open-wallpaper-engine/v0.1.12";
       flake = false;
     };
   };
@@ -31,42 +31,27 @@
     forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     nixpkgsFor = forAllSystems (system: import nixpkgs {inherit system;});
 
-    # Parse deps.json from waywallen-src
-    depsJson = builtins.fromJSON (builtins.readFile "${waywallen-src}/deps.json");
+    # Sub-deps are resolved from each upstream's deps.json (see
+    # pkgs/fetch-upstream-deps.nix). Only LFS outputs need a nix hash here.
+    waywallenLfsHashes = {
+      qml_material = "sha256-bAr2BiW7Rj3QBFIOCHyIKBuXxZiHjFz7U7pOAbPzhrA=";
+    };
 
-    # Helper to resolve sub-dependencies dynamically from deps.json
-    fetchDepFor = pkgs: name: let
-      match = builtins.filter (d: d.x-cmake.name or "" == name) depsJson;
-    in
-      if builtins.length match > 0
-      then let
-        dep = builtins.head match;
-      in
-        if name == "qml_material"
-        then
-          # qml_material ships LFS assets (icon font woff2); must use
-          # pkgs.fetchgit with fetchLFS = true. Hash must match the commit
-          # in deps.json — update it when deps.json bumps qml_material.
-          pkgs.fetchgit {
-            url = dep.url;
-            rev = dep.commit;
-            hash = "sha256-iygNy9PvQpK0/PoHCNOjMYNNn19YMSWFSaVakFK3XQI=";
-            fetchLFS = true;
-          }
-        else
-          builtins.fetchGit {
-            url = dep.url;
-            rev = dep.commit;
-            allRefs = true;
-          }
-      else throw "Dependency ${name} not found in deps.json";
+    fetchDepsFor = pkgs: src:
+      pkgs.callPackage ./pkgs/fetch-upstream-deps.nix {
+        depsJson = builtins.fromJSON (builtins.readFile "${src}/deps.json");
+        lfsHashes = waywallenLfsHashes;
+      };
   in {
     packages = forAllSystems (
       system: let
         pkgs = nixpkgsFor.${system};
-        fetchDep = fetchDepFor pkgs;
+        # Clang 22 + older libstdc++ (conda sysroot_linux-64=2.28 baseline).
+        llvmPackages = pkgs.callPackage ./pkgs/upstream-clang.nix {};
+        fetchDep = fetchDepsFor pkgs waywallen-src;
         waywallen-daemon = pkgs.callPackage ./pkgs/waywallen-daemon.nix {src = waywallen-src;};
         waywallen-ui = pkgs.callPackage ./pkgs/waywallen-ui.nix {
+          inherit llvmPackages;
           src = waywallen-src;
           rstd-src = fetchDep "rstd";
           ncrequest-src = fetchDep "ncrequest";
@@ -77,9 +62,11 @@
           pegtl-src = fetchDep "pegtl";
         };
         waywallen-plugins = pkgs.callPackage ./pkgs/waywallen-plugins.nix {
+          inherit llvmPackages;
           src = waywallen-src;
           rstd-src = fetchDep "rstd";
           wavsen-src = fetchDep "wavsen";
+          nlohmann_json-src = fetchDep "nlohmann_json";
         };
         waywallen-layer-shell = pkgs.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
         waywallen-kde = pkgs.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};
@@ -88,7 +75,7 @@
         inherit waywallen-daemon waywallen-ui waywallen-plugins waywallen-layer-shell waywallen-kde waywallen-gnome;
 
         waywallen-open-wallpaper-engine = pkgs.callPackage ./pkgs/waywallen-open-wallpaper-engine.nix {
-          inherit waywallen-plugins;
+          inherit llvmPackages waywallen-plugins;
           src = open-wallpaper-engine-src;
         };
 
@@ -114,10 +101,12 @@
     );
 
     overlays.default = final: prev: let
-      fetchDep = fetchDepFor final;
+      llvmPackages = final.callPackage ./pkgs/upstream-clang.nix {};
+      fetchDep = fetchDepsFor final waywallen-src;
     in {
       waywallen-daemon = final.callPackage ./pkgs/waywallen-daemon.nix {src = waywallen-src;};
       waywallen-ui = final.callPackage ./pkgs/waywallen-ui.nix {
+        inherit llvmPackages;
         src = waywallen-src;
         rstd-src = fetchDep "rstd";
         ncrequest-src = fetchDep "ncrequest";
@@ -128,14 +117,17 @@
         pegtl-src = fetchDep "pegtl";
       };
       waywallen-plugins = final.callPackage ./pkgs/waywallen-plugins.nix {
+        inherit llvmPackages;
         src = waywallen-src;
         rstd-src = fetchDep "rstd";
         wavsen-src = fetchDep "wavsen";
+        nlohmann_json-src = fetchDep "nlohmann_json";
       };
       waywallen-layer-shell = final.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
       waywallen-kde = final.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};
       waywallen-gnome = final.callPackage ./pkgs/waywallen-gnome.nix {src = waywallen-display-src;};
       waywallen-open-wallpaper-engine = final.callPackage ./pkgs/waywallen-open-wallpaper-engine.nix {
+        inherit llvmPackages;
         waywallen-plugins = final.waywallen-plugins;
         src = open-wallpaper-engine-src;
       };
