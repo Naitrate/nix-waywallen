@@ -103,7 +103,7 @@
 in
   llvmPackages.stdenv.mkDerivation {
     pname = "waywallen-open-wallpaper-engine";
-    version = "0.1.12";
+    version = "0.2.0";
 
     inherit src;
 

@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "waywallen-layer-shell";
-  version = "0.2.8";
+  version = "0.2.9";
 
   inherit src;
 

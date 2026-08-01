@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation {
   pname = "waywallen-display-gnome";
-  version = "0.2.8";
+  version = "0.2.9";
 
   inherit src;
 

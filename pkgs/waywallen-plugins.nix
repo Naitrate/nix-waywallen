@@ -19,7 +19,7 @@
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "waywallen-plugins";
-  version = "0.2.5";
+  version = "0.2.6";
 
   inherit src;
 
