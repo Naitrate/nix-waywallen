@@ -57,7 +57,7 @@
     eigen = fetchDep "eigen";
     spirv_reflect = fetchDep "spirv_reflect";
     glslang_src = fetchDep "glslang";
-    #argparse = fetchDep "argparse";
+    argparse = fetchDep "argparse";
     quickjs = fetchDep "quickjs";
 
     # CEF is a prebuilt binary distro; autoPatchelfHook rewrites interpreter /
@@ -103,7 +103,7 @@
 in
   llvmPackages.stdenv.mkDerivation {
     pname = "waywallen-open-wallpaper-engine";
-    version = "0.2.0";
+    version = "0.1.12";
 
     inherit src;
 
@@ -163,7 +163,7 @@ in
       "-DFETCHDEPS_LOCAL_eigen=${deps.eigen}"
       "-DFETCHDEPS_LOCAL_spirv_reflect=${deps.spirv_reflect}"
       "-DFETCHDEPS_LOCAL_glslang=${deps.glslang_src}"
-      #"-DFETCHDEPS_LOCAL_argparse=${deps.argparse}"
+      "-DFETCHDEPS_LOCAL_argparse=${deps.argparse}"
       "-DFETCHDEPS_LOCAL_quickjs=${deps.quickjs}"
       "-DFETCHDEPS_LOCAL_cef=${deps.cef}"
     ];
