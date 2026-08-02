@@ -61,6 +61,7 @@ in rec {
     src = open-wallpaper-engine-src;
     vma-src = fetchDep "vma";
     vvk-src = fetchDep "vvk";
+    rstd-src = fetchDep "rstd";
   };
 
   # Combined package: daemon + plugins + open wallpaper engine + ui

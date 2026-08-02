@@ -44,6 +44,7 @@
   waywallen-plugins, # provides waywallen::bridge headers/cmake config
   vma-src,
   vvk-src,
+  rstd-src,
   patchelf,
   src,
 }: let
@@ -54,7 +55,7 @@
   };
 
   deps = {
-    rstd = fetchDep "rstd";
+    rstd-src = fetchDep "rstd";
     wavsen = fetchDep "wavsen";
     eigen = fetchDep "eigen";
     spirv_reflect = fetchDep "spirv_reflect";
@@ -162,7 +163,7 @@ in
       # Provide the waywallen IPC bridge cmake config from the plugins package
       "-Dwaywallen-bridge_DIR=${waywallen-plugins}/lib/cmake/waywallen-bridge"
       # Redirect all FetchContent calls to pre-fetched Nix store paths
-      "-DFETCHDEPS_LOCAL_rstd=${deps.rstd}"
+      "-DFETCHDEPS_LOCAL_rstd=${deps.rstd-src}"
       "-DFETCHDEPS_LOCAL_wavsen=${deps.wavsen}"
       "-DFETCHDEPS_LOCAL_eigen=${deps.eigen}"
       "-DFETCHDEPS_LOCAL_spirv_reflect=${deps.spirv_reflect}"
