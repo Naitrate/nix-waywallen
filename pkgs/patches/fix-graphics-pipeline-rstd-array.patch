@@ -7,9 +7,10 @@ index 7fa4a79..ab03f07 100644
                                                           const rstd::array<float, 4>& constants) {
      m_color.flags = flags;
 -    std::copy(constants.begin(), constants.end(), std::begin(m_color.blendConstants));
-+    for (usize i = 0; i < 4; ++i) {
-+      m_color.blendConstants[i] = constants[i];
-+    }
++    m_color.blendConstants[0] = constants.at(0);
++    m_color.blendConstants[1] = constants.at(1);
++    m_color.blendConstants[0] = constants.at(2);
++    m_color.blendConstants[0] = constants.at(3);
      return *this;
  }
  
