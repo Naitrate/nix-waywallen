@@ -42,6 +42,7 @@
   libxcb,
   glslang, # provides glslangValidator for wavsen GLSL→SPIR-V compilation
   waywallen-plugins, # provides waywallen::bridge headers/cmake config
+  vma-src,
   patchelf,
   src,
 }: let
@@ -58,7 +59,7 @@
     spirv_reflect = fetchDep "spirv_reflect";
     glslang_src = fetchDep "glslang";
     quickjs = fetchDep "quickjs";
-    vma = fetchDep "vma";
+    vma-src = fetchDep "vma";
 
     # CEF is a prebuilt binary distro; autoPatchelfHook rewrites interpreter /
     # NEEDED paths so libcef.so can resolve against nixpkgs libraries.
@@ -165,7 +166,7 @@ in
       "-DFETCHDEPS_LOCAL_glslang=${deps.glslang_src}"
       "-DFETCHDEPS_LOCAL_quickjs=${deps.quickjs}"
       "-DFETCHDEPS_LOCAL_cef=${deps.cef}"
-      "-DFETCHDEPS_LOCAL_vma=${deps.vma}"
+      "-DFETCHDEPS_LOCAL_vma=${deps.vma-src}"
     ];
 
     postFixup = ''

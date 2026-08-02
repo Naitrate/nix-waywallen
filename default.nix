@@ -60,6 +60,7 @@ in rec {
   waywallen-open-wallpaper-engine = pkgs.callPackage ./pkgs/waywallen-open-wallpaper-engine.nix {
     inherit llvmPackages waywallen-plugins;
     src = open-wallpaper-engine-src;
+    vma-src = fetchDep "vma";
   };
 
   # Combined package: daemon + plugins + open wallpaper engine + ui

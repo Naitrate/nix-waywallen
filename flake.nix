@@ -77,7 +77,7 @@
         waywallen-open-wallpaper-engine = pkgs.callPackage ./pkgs/waywallen-open-wallpaper-engine.nix {
           inherit llvmPackages waywallen-plugins;
           src = open-wallpaper-engine-src;
-          vma = fetchDep "vma";
+          vma-src = fetchDep "vma";
         };
 
         # Combined package: daemon + renderer plugins + ui + owe
@@ -131,7 +131,7 @@
         inherit llvmPackages;
         waywallen-plugins = final.waywallen-plugins;
         src = open-wallpaper-engine-src;
-        vma = fetchDep "vma";
+        vma-src = fetchDep "vma";
       };
       waywallen = final.symlinkJoin {
         name = "waywallen-${final.waywallen-daemon.version}";
