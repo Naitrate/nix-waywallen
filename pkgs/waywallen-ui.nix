@@ -18,7 +18,6 @@
 , wavsen-src
 , qml_material-src
 , QExtra-src
-, asio-src
 , pegtl-src
 }:
 llvmPackages.stdenv.mkDerivation rec {
@@ -75,7 +74,6 @@ llvmPackages.stdenv.mkDerivation rec {
     "-DFETCHDEPS_LOCAL_wavsen=${wavsen-src}"
     "-DFETCHDEPS_LOCAL_qml_material=${qml_material-src}"
     "-DFETCHDEPS_LOCAL_QExtra=${QExtra-src}"
-    "-DFETCHDEPS_LOCAL_asio=${asio-src}"
     "-DFETCHDEPS_LOCAL_pegtl=${pegtl-src}"
     "-DCMAKE_MODULE_PATH=${qt6.qtgrpc}/lib/cmake/Qt6"
     "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages.clang-tools}/bin/clang-scan-deps"

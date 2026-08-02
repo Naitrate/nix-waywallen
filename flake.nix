@@ -58,7 +58,6 @@
           wavsen-src = fetchDep "wavsen";
           qml_material-src = fetchDep "qml_material";
           QExtra-src = fetchDep "QExtra";
-          asio-src = fetchDep "asio";
           pegtl-src = fetchDep "pegtl";
         };
         waywallen-plugins = pkgs.callPackage ./pkgs/waywallen-plugins.nix {
@@ -114,7 +113,6 @@
         wavsen-src = fetchDep "wavsen";
         qml_material-src = fetchDep "qml_material";
         QExtra-src = fetchDep "QExtra";
-        asio-src = fetchDep "asio";
         pegtl-src = fetchDep "pegtl";
       };
       waywallen-plugins = final.callPackage ./pkgs/waywallen-plugins.nix {
