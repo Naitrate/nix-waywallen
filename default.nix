@@ -49,7 +49,6 @@
     src = waywallen-src;
     rstd-src = fetchDep "rstd";
     wavsen-src = fetchDep "wavsen";
-    nlohmann_json-src = fetchDep "nlohmann_json";
   };
   waywallen-layer-shell = pkgs.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
   waywallen-kde = pkgs.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};

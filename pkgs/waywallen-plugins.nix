@@ -15,7 +15,6 @@
   src,
   rstd-src,
   wavsen-src,
-  nlohmann_json-src,
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "waywallen-plugins";
@@ -69,7 +68,6 @@ llvmPackages.stdenv.mkDerivation rec {
     # Point FetchDeps at the pre-fetched Nix store paths
     "-DFETCHDEPS_LOCAL_rstd=${rstd-src}"
     "-DFETCHDEPS_LOCAL_wavsen=${wavsen-src}"
-    "-DFETCHDEPS_LOCAL_nlohmann_json=${nlohmann_json-src}"
     # C++20 module scanning
     "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages.clang-tools}/bin/clang-scan-deps"
   ];
