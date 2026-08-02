@@ -42,8 +42,6 @@
   libxcb,
   glslang, # provides glslangValidator for wavsen GLSL→SPIR-V compilation
   waywallen-plugins, # provides waywallen::bridge headers/cmake config
-  vma-src,
-  vvk-src,
   patchelf,
   src,
 }: let
