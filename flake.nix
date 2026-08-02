@@ -78,6 +78,7 @@
           inherit llvmPackages waywallen-plugins;
           src = open-wallpaper-engine-src;
           vma-src = fetchDep "vma";
+          vvk-src = fetchDep "vvk";
         };
 
         # Combined package: daemon + renderer plugins + ui + owe
