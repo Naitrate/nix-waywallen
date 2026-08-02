@@ -59,6 +59,7 @@
     glslang_src = fetchDep "glslang";
     #argparse = fetchDep "argparse";
     quickjs = fetchDep "quickjs";
+    vma = fetchDep "vma";
 
     # CEF is a prebuilt binary distro; autoPatchelfHook rewrites interpreter /
     # NEEDED paths so libcef.so can resolve against nixpkgs libraries.
@@ -166,6 +167,7 @@ in
       #"-DFETCHDEPS_LOCAL_argparse=${deps.argparse}"
       "-DFETCHDEPS_LOCAL_quickjs=${deps.quickjs}"
       "-DFETCHDEPS_LOCAL_cef=${deps.cef}"
+      "-DFETCHDEPS_LOCAL_vma=${deps.vma}"
     ];
 
     postFixup = ''
