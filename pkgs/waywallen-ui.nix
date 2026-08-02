@@ -23,7 +23,7 @@
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "waywallen-ui";
-  version = "0.2.6";
+  version = "0.2.5";
 
   inherit src;
 
