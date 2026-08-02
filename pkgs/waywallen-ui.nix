@@ -18,7 +18,6 @@
 , wavsen-src
 , qml_material-src
 , QExtra-src
-, pegtl-src
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "waywallen-ui";
@@ -35,7 +34,7 @@ llvmPackages.stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "\''${CMAKE_SOURCE_DIR}/cmake/FetchDeps.cmake" "\''${CMAKE_CURRENT_SOURCE_DIR}/../cmake/FetchDeps.cmake" \
-      --replace "fetchdeps(\''${CMAKE_SOURCE_DIR}/deps.json)" "fetchdeps(\''${CMAKE_CURRENT_SOURCE_DIR}/../deps.json NAMES pegtl rstd ncrequest wavsen qml_material QExtra)" \
+      --replace "fetchdeps(\''${CMAKE_SOURCE_DIR}/deps.json)" "fetchdeps(\''${CMAKE_CURRENT_SOURCE_DIR}/../deps.json NAMES  rstd ncrequest wavsen qml_material QExtra)" \
       --replace "set(QT_QML_GENERATE_QMLLS_INI ON)" "set(QT_QML_GENERATE_QMLLS_INI OFF)"
   '';
 
@@ -74,7 +73,6 @@ llvmPackages.stdenv.mkDerivation rec {
     "-DFETCHDEPS_LOCAL_wavsen=${wavsen-src}"
     "-DFETCHDEPS_LOCAL_qml_material=${qml_material-src}"
     "-DFETCHDEPS_LOCAL_QExtra=${QExtra-src}"
-    "-DFETCHDEPS_LOCAL_pegtl=${pegtl-src}"
     "-DCMAKE_MODULE_PATH=${qt6.qtgrpc}/lib/cmake/Qt6"
     "-DCMAKE_CXX_COMPILER_CLANG_SCAN_DEPS=${llvmPackages.clang-tools}/bin/clang-scan-deps"
   ];
