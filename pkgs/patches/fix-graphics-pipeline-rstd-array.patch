@@ -1,0 +1,14 @@
+diff --git a/src/Vulkan/GraphicsPipeline.cpp b/src/Vulkan/GraphicsPipeline.cpp
+index 0000000..0000000 100644
+--- a/src/Vulkan/GraphicsPipeline.cpp
++++ b/src/Vulkan/GraphicsPipeline.cpp
+@@ -120,7 +120,9 @@ GraphicsPipeline& GraphicsPipeline::setColorBlendOptions(VkPipelineColorBlendSt
+ GraphicsPipeline& GraphicsPipeline::setColorBlendOptions(VkPipelineColorBlendStateCreateFlags flags,
+                                                          const rstd::array<float, 4>& constants) {
+     m_color.flags = flags;
+-    std::copy(constants.begin(), constants.end(), std::begin(m_color.blendConstants));
++    for (size_t i = 0; i < 4; ++i) {
++        m_color.blendConstants[i] = constants[i];
++    }
+     return *this;
+ }

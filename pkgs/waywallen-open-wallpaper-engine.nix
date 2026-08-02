@@ -120,6 +120,7 @@ in
     # upstream's post-fetch setup that expects cmake-noop.
     patches = [
       ./patches/owe-fetchdeps-local-source-subdir.patch
+      ./patches/fix-graphics-pipeline-rstd-array.patch
     ];
 
     nativeBuildInputs = [

@@ -64,6 +64,8 @@
           src = waywallen-src;
           rstd-src = fetchDep "rstd";
           wavsen-src = fetchDep "wavsen";
+          vma-src = fetchDep "vma";
+          vvk-src = fetchDep "vvk";
         };
         waywallen-layer-shell = pkgs.callPackage ./pkgs/waywallen-layer-shell.nix {src = waywallen-display-src;};
         waywallen-kde = pkgs.callPackage ./pkgs/waywallen-kde.nix {src = waywallen-display-src;};
