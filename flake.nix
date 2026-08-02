@@ -133,6 +133,7 @@
         waywallen-plugins = final.waywallen-plugins;
         src = open-wallpaper-engine-src;
         vma-src = fetchDep "vma";
+        vvk-src = fetchDep "vvk";
       };
       waywallen = final.symlinkJoin {
         name = "waywallen-${final.waywallen-daemon.version}";
