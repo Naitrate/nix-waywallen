@@ -61,16 +61,16 @@
     "waywallen-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1785066535,
-        "narHash": "sha256-i7kvhOHiJZaiBFLRWSfbLmTkiAx//cSFAraG2rpb5I4=",
+        "lastModified": 1783873601,
+        "narHash": "sha256-xojP0C+q+1CcXAtxHALjaoMaJtjzuGk0A2RW8mAxwaE=",
         "owner": "waywallen",
         "repo": "waywallen",
-        "rev": "8427e71bd70403510d12cbd976428ea0fd8b0cbb",
+        "rev": "67950ba0e70b8ba675dc2b98cbf29e163ef8338a",
         "type": "github"
       },
       "original": {
         "owner": "waywallen",
-        "ref": "v0.2.6",
+        "ref": "v0.2.5",
         "repo": "waywallen",
         "type": "github"
       }
