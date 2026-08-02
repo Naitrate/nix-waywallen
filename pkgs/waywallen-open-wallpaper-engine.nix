@@ -44,7 +44,6 @@
   waywallen-plugins, # provides waywallen::bridge headers/cmake config
   vma-src,
   vvk-src,
-  rstd-src,
   patchelf,
   src,
 }: let
@@ -148,6 +147,13 @@ in
       expat
       waywallen-plugins
       llvmPackages.libstdcxx
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
     ];
 
     NIX_LDFLAGS = llvmPackages.libstdcxxLinkFlags;

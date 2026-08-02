@@ -14,7 +14,7 @@
 #     depsJson = builtins.fromJSON (builtins.readFile "${src}/deps.json");
 #     lfsHashes.qml_material = "sha256-...";
 #   };
-#   rstd = fetchDep "rstd";
+#   rstd-src = fetchDep "rstd";
 {
   lib,
   pkgs,
